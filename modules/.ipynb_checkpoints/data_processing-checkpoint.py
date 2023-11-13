@@ -96,7 +96,6 @@ def create_elections_df(df):
     positive_votes = grouped_df['VOT'].apply(lambda x: (x == 1).sum())
     negative_votes = grouped_df['VOT'].apply(lambda x: (x == -1).sum())
     neutral_votes = grouped_df['VOT'].apply(lambda x: (x == 0).sum())
-    total_votes = counts.sum()
 
     # Calculate percentages
     positive_percentage = (positive_votes / counts) * 100
@@ -128,20 +127,48 @@ def create_candidates_df(df):
     Create a summary DataFrame for candidates based on 'TGT' (candidate).
 
     Parameters:
-    - df: DataFrame containing election data with columns 'TGT', 'ELECTION_ID', 'TXT'.
+    - df: DataFrame containing election data with columns 'TGT', 'ELECTION_ID', 'RES', 'VOT', 'TXT'.
 
     Returns:
     - candidates_df: Summary DataFrame with information about candidates.
     """
-    # Group by 'TGT' (candidate) and calculate candidate-related statistics
-    candidate_grouped = df.groupby('TGT')
+    # Calculate Total Votes, Positive Votes, Negative Votes, Neutral Votes, and Average Length
+    grouped_df = df.groupby(['TGT', 'ELECTION_ID', 'RES'])
+    counts = grouped_df['VOT'].count()
+    positive_votes = grouped_df['VOT'].apply(lambda x: (x == 1).sum())
+    negative_votes = grouped_df['VOT'].apply(lambda x: (x == -1).sum())
+    neutral_votes = grouped_df['VOT'].apply(lambda x: (x == 0).sum())
+    average_length = grouped_df['TXT'].apply(lambda x: x.str.len().mean())
+
+    # Create a DataFrame with calculated values
+    elections_df = pd.DataFrame({
+        'TGT': grouped_df['TGT'].first(),
+        'ELECTION_ID': grouped_df['ELECTION_ID'].first(),
+        'RES': grouped_df['RES'].first(),
+        'Total Votes': counts,
+        'Positive Votes': positive_votes,
+        'Negative Votes': negative_votes,
+        'Neutral Votes': neutral_votes,
+        'Average Length': average_length
+    }).reset_index(drop=True)
+
+    # Aggregate data by 'TGT' for final candidate statistics
+    grouped_candidates = elections_df.groupby('TGT')
     candidates_df = pd.DataFrame({
-        'USER': candidate_grouped['TGT'].first(),
-        'Number of Elections': candidate_grouped['ELECTION_ID'].nunique(),
-        'Average Text Length': candidate_grouped['TXT'].apply(lambda x: x.str.len().mean())
+        'TGT': grouped_candidates['TGT'].first(),
+        'Number of Elections': grouped_candidates['ELECTION_ID'].nunique(),
+        'Won Elections': grouped_candidates['RES'].apply(lambda x: (x == 1).sum()),
+        'Lost Elections': grouped_candidates['RES'].apply(lambda x: (x == 0).sum()),
+        'Votes Received': grouped_candidates['Total Votes'].sum(),
+        'Positive Percentage': grouped_candidates['Positive Votes'].sum() / grouped_candidates['Total Votes'].sum(),
+        'Negative Percentage': grouped_candidates['Negative Votes'].sum() / grouped_candidates['Total Votes'].sum(),
+        'Neutral Percentage': grouped_candidates['Neutral Votes'].sum() / grouped_candidates['Total Votes'].sum(),
+        'Average Length Received': grouped_candidates['Average Length'].mean()
     }).reset_index(drop=True)
 
     return candidates_df
+
+
 
 def create_voters_df(df):
     """
