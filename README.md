@@ -27,7 +27,7 @@ Since our objective is to analyze the factors behind people's voting choices, we
 
 
 ## Methods:
-### Part 1 Data preprocessing :
+### Part 1 : Data preprocessing :
 #### Part 1.1 : Data extraction :
 We parse the data text file to extract information that must be included in our initial dataframe. We proceed then to formatting the columns and handling the missing data by exploring the reasons and correcting the inconsistent values.
 And for better analysis, we create three dataframes: the first one contains information about candidates, the second one about the voters, and the third one repertories the different elections and their outcomes.
@@ -62,4 +62,27 @@ The goal behind performing a network analysis would be to assess the possibility
 
 ### Part 5 : Answering the scientific questions :
 Now that we have completed our data analysis, we can gather our results in a comprehensive guide and create a data story presenting the motivations behind positive, neutral and negative votes. Thanks to this, candidates will gain a better understanding of the factors contributing to a successful election, including the percentage of votes required for a positive outcome, the potential influencers among voters, and the candidate qualities that hold significant importance for adminship. 
+
+## Proposed timeline
+-  10/11/2023 - Step 1 to 3
+-  17/11/2022 - Step 5 and 6, and beginning of step 4 and 7 - Deliver Milestone 2
+-  08/12/2022 - End of step 4 and 7 and beginning of part 4
+-  08/12/2022 - Part 4 : Perform Popularity and Centrality Analysis
+-  15/12/2022 - Part 4 : Create Graph Visualizations and beginning of part 5
+-  21/12/2022 - Data Story and Page Design
+-  22/12/2022 - Deliver Milestone 3
+
+## Organization within the team:
+
+-  **Akram Elbouanani** : Data processing, network graph analysis, page design
+-  **Christian Doimo** : Sentiment analysis, clustering comments by topic, documenting
+-  **Liandro Da Silva Monteiro** : Sentiment analysis, clustering comments by topic, data story
+-  **Murielle Iradukunda** : Data processing, Data analysis, documenting, page design
+-  **Yasmine Sakas** : Data processing, sentiment analysis, data story
+
+## Questions for TAs (optional):
+
+-  We have a lot of information, and it feels very clustered to put them in one notebook, as is the case for Milestone 2. Would it be possible to have different notebooks, one containing NLP, one containing Graph Analysis and one with Data exploration?
+
+
 
