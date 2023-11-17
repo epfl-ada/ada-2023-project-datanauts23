@@ -65,7 +65,7 @@ Now that we have completed our data analysis, we can gather our results in a com
 
 ## Proposed timeline
 -  10/11/2023 - Part 1
--  17/11/2022 - Part 3.1 and 3.2, and beginning of part 3.4 and part 2 - Deliver Milestone 2
+-  17/11/2022 - Part 3.1 and 3.2, and beginning of part 2 and part 3.4 - Deliver Milestone 2
 -  08/12/2022 - End of part 2 and 3.4 and beginning of part 4
 -  08/12/2022 - Part 4 : Perform Popularity and Centrality Analysis
 -  15/12/2022 - Part 4 : Create Graph Visualizations and beginning of part 5
