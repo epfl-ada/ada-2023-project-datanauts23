@@ -190,7 +190,8 @@ def create_voters_df(df):
         'Negative Percentage': voter_grouped['VOT'].apply(lambda x: (x == -1).mean() * 100),
         'Neutral Percentage': voter_grouped['VOT'].apply(lambda x: (x == 0).mean() * 100),
         'Voted Differently': voter_grouped.apply(lambda group: (group['VOT'] != group['RES']).mean() * 100),
-        'Voted Similarly': voter_grouped.apply(lambda group: (group['VOT'] == group['RES']).mean() * 100)
+        'Voted Similarly': voter_grouped.apply(lambda group: (group['VOT'] == group['RES']).mean() * 100),
+        'Average Length Cast': voter_grouped['TXT'].apply(lambda x: x.str.len().mean())
     }).reset_index(drop=True)
 
     return voters_df
