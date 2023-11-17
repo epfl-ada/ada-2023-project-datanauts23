@@ -155,7 +155,7 @@ def create_candidates_df(df):
     # Aggregate data by 'TGT' for final candidate statistics
     grouped_candidates = elections_df.groupby('TGT')
     candidates_df = pd.DataFrame({
-        'TGT': grouped_candidates['TGT'].first(),
+        'USER': grouped_candidates['TGT'].first(),
         'Number of Elections': grouped_candidates['ELECTION_ID'].nunique(),
         'Won Elections': grouped_candidates['RES'].apply(lambda x: (x == 1).sum()),
         'Lost Elections': grouped_candidates['RES'].apply(lambda x: (x == 0).sum()),
@@ -194,3 +194,122 @@ def create_voters_df(df):
     }).reset_index(drop=True)
 
     return voters_df
+
+
+
+def remove_wiki_markup(txt):
+    
+    """
+    Removes the wiki markup from the given text.
+    
+    Parameters:
+    - txt (string): containing markup to be removed
+    
+    Returns:
+    - cleaned_txt (string): text without markup
+    """
+    
+    cleaned_txt = re.sub(r"\[\[.*?\]\]", "", txt) # internal links like: '[[WP:NETPOS]]'
+    cleaned_txt = re.sub(r"&[a-zA-Z]+;|&#[0-9]+;", "", cleaned_txt) # html entities like: '&nbsp;–&nbsp';
+    cleaned_txt = re.sub(r"'''(.*?)'''", r"\1", cleaned_txt) # bold
+    cleaned_txt = re.sub(r"''(.*?)''", r"\1", cleaned_txt) # italic
+    cleaned_txt = re.sub(r"<.*?>", "", cleaned_txt) # html
+    cleaned_txt = re.sub(r"\[\[.*?\|([^\]]*?)\]\]", r"\1", cleaned_txt) # links
+    cleaned_txt = re.sub(r"\[http[^\]]*?\]", "", cleaned_txt) # external links 
+    cleaned_txt = re.sub(r"\{\{.*?\}\}", "", cleaned_txt) # templates 
+    cleaned_txt = re.sub(r"==([^=]+)==", r"\1", cleaned_txt) # header 
+    cleaned_txt = re.sub(r"==([^=]+)==", r"\1", cleaned_txt) # dash
+    cleaned_txt = re.sub(r'--', ' ', cleaned_txt)
+    cleaned_txt = re.sub(r"'''", ' ', cleaned_txt)
+    return cleaned_txt
+
+
+
+def parse_other_datasets(file_path):
+    data = []
+    row_data = []
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            line = line.strip()
+            if line[:2] == '| ':
+                row_data.append(line[2:])
+            else:
+                if row_data:
+                    data.append(row_data)
+                    row_data = []
+
+    if row_data:
+        data.append(row_data)
+
+    column_names = data[0] if data else None
+    df = pd.DataFrame(data[1:], columns=column_names)
+    return df
+
+
+def format_authors_df(df):
+    """
+    Modifies the input DataFrame with specific transformations.
+
+    - For indexes 0 to 100, it takes the value in the column 'NB_ARTICLES' of the 101st index and adds 1 to those values.
+    - Sets the 'RANK' column to 1 for first 100 rows.
+    - Converts 'RANK' column to numeric, 'NB_ARTICLES' to integer, and 'USER' to string data types.
+    - Cleans the 'USER' column to retain only the username without the "User:..." prefix.
+
+    Args:
+    - df (pandas DataFrame): Input DataFrame to be modified.
+
+    Returns:
+    - None (modifies the DataFrame in place).
+    """
+
+    df.loc[:100, 'NB_ARTICLES'] = str(int(df.loc[101, 'NB_ARTICLES'].replace(',', '')) + 1)
+    df.loc[:100, 'RANK'] = 1
+    df['RANK'] = pd.to_numeric(df['RANK'])
+    df['NB_ARTICLES'] = df['NB_ARTICLES'].str.replace(',', '').astype(int)
+    df['USER'] = df['USER'].astype(str)
+    to_format = df['USER'].str.match(r'\[\[User:[^\|]+\|([^\]]+)\]\]', na=False)
+    df.loc[to_format, 'USER'] = df.loc[to_format, 'USER'].str.extract(r'\[\[User:[^\|]+\|([^\]]+)\]\]', expand=False)
+    
+    
+    
+def format_editors_df(df):
+    """
+    Modifies the input DataFrame with specific transformations.
+
+    - Converts 'RANK' column to numeric, 'NB_ARTICLES' to integer, and 'USER' to string data types.
+    - Cleans the 'USER' column to retain only the username without the "User:..." prefix.
+
+    Args:
+    - df (pandas DataFrame): Input DataFrame to be modified.
+
+    Returns:
+    - None (modifies the DataFrame in place).
+    """
+
+    df['RANK'] = pd.to_numeric(df['RANK'])
+    df['NB_EDITS'] = df['NB_EDITS'].str.replace(',', '').astype(int)
+    df['USER'] = df['USER'].astype(str)
+    to_format = df['USER'].str.match(r'\[\[User:[^\|]+\|([^\]]+)\]\]', na=False)
+    df.loc[to_format, 'USER'] = df.loc[to_format, 'USER'].str.extract(r'\[\[User:[^\|]+\|([^\]]+)\]\]', expand=False)
+    
+    
+def format_creators_df(df):
+    """
+    Modifies the input DataFrame with specific transformations.
+
+    - Converts 'RANK' column to numeric, 'NB_ARTICLES' to integer, and 'USER' to string data types.
+    - Cleans the 'USER' column to retain only the username without the "User:..." prefix.
+
+    Args:
+    - df (pandas DataFrame): Input DataFrame to be modified.
+
+    Returns:
+    - None (modifies the DataFrame in place).
+    """
+
+    df['RANK'] = pd.to_numeric(df['RANK'])
+    df['NB_PAGES'] = df['NB_PAGES'].str.replace(',', '').astype(int)
+    df['USER'] = df['USER'].astype(str)
+    to_format = df['USER'].str.match(r'\[\[User:[^\|]+\|([^\]]+)\]\]', na=False)
+    df.loc[to_format, 'USER'] = df.loc[to_format, 'USER'].str.extract(r'\[\[User:[^\|]+\|([^\]]+)\]\]', expand=False)
