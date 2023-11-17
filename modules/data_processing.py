@@ -224,7 +224,34 @@ def remove_wiki_markup(txt):
     cleaned_txt = re.sub(r"'''", ' ', cleaned_txt)
     return cleaned_txt
 
+def nlp_pipeline(text):
+    '''
+    performs several text preprocessing steps
+    
+    Parameters:
+    - text (string): text to be preprocessed
+    
+    Returns:
+    - processed_text (string): preprocessed text
+    '''
+    processed_text = text.lower()
+    processed_text = processed_text.replace('\n', ' ').replace('\r', '')
+    processed_text = ' '.join(processed_text.split())
+    processed_text = re.sub(r"[A-Za-z\.]*[0-9]+[A-Za-z%°\.]*", "", processed_text)
+    processed_text = re.sub(r"(\s\-\s|-$)", "", processed_text)
+    processed_text = re.sub(r"[,\!\?\%\(\)\/\"]", "", processed_text)
+    processed_text = re.sub(r"\&\S*\s", "", processed_text)
+    processed_text = re.sub(r"\&", "", processed_text)
+    processed_text = re.sub(r"\+", "", processed_text)
+    processed_text = re.sub(r"\#", "", processed_text)
+    processed_text = re.sub(r"\$", "", processed_text)
+    processed_text = re.sub(r"\£", "", processed_text)
+    processed_text = re.sub(r"\%", "", processed_text)
+    processed_text = re.sub(r"\:", "", processed_text)
+    processed_text = re.sub(r"\@", "", processed_text)
+    processed_text = re.sub(r"\-", "", processed_text)
 
+    return processed_text
 
 def parse_other_datasets(file_path):
     data = []
