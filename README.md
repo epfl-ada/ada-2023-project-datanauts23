@@ -21,6 +21,24 @@ Our project aims to explore the following research questions:
 
 Since our objective is to analyze the factors behind people's voting choices, we need metrics to evaluate the productivity of users. For that, we use additional datasets containing statistics about Wikipedia users, precisely: 
 
--  The number of pages created per user: https://en.wikipedia.org/wiki/User:Bryan/List_of_users_by_pages_created <br>
--  The number of articles per user : https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_article_count <br>
--  The number of edits per user: https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_number_of_edits <br>
+-  The number of pages created per user: [List_of_users_by_pages_created](https://en.wikipedia.org/wiki/User:Bryan/List_of_users_by_pages_created) <br>
+-  The number of articles per user : [List_of_Wikipedians_by_article_count](https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_article_count) <br>
+-  The number of edits per user: [List_of_Wikipedians_by_number_of_edits](https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_number_of_edits) <br>
+
+
+## Methods:
+### Data preprocessing :
+#### Step 1 : Data extraction :
+We parse the data text file to extract information that must be included in our initial dataframe. We proceed then to formatting the columns and handling the missing data by exploring the reasons and correcting the inconsistent values.
+And for better analysis, we create three dataframes: the first one contains information about candidates, the second one about the voters, and the third one repertories the different elections and their outcomes.
+
+#### Step 2 : Text processing
+The voters’ comments are written in [WikiMarkup](https://en.wikipedia.org/wiki/Help:Wikitext), which is not optimal for the textual data analysis. Therefore, we remove the Wiki markup using regular expressions due to the limitations of Wikitext libraries to handle the removal as wished, like: ignoring the wikilinks, … .
+
+#### Step 3 : Exploratory data analysis
+We start our data analysis by studying  the number variation of voters and candidates over years in order to have a better understanding of the dataset. Subsequently, we address the question regarding the voters’ engagement  in the voting process: do users who took part in an election in 2003 also engage in subsequent years like 2004, 2005, etc.? 
+
+
+### Step 4 : data analysis :  
+In our analysis, we explore various variables that could influence the acceptance or rejection of candidates in elections, aiming to uncover the factors leading to a successful outcome. We first study the voters' previous voting activity, quantified as the ratio of past votes to active years. Secondly, we examine candidates' prior involvement in the voting process before seeking adminship. To explore the correlation with the election outcome for these four variables, we employ visualizations and hypothesis tests, including t-tests and chi-test.
+We finally use the additional datasets to investigate the correlation between the activities of voters and candidates (such as the number of pages created, written, or edited) and the outcome of the election in which they participate.
