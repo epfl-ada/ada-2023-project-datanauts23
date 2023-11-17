@@ -80,7 +80,7 @@ Now that we have completed our data analysis, we can gather our results in a com
 -  **Murielle Iradukunda** : Data processing, Data analysis, documenting, page design
 -  **Yasmine Sakas** : Data processing, sentiment analysis, data story
 
-## Questions for TAs (optional):
+## Questions for TAs:
 
 -  We have a lot of information, and it feels very clustered to put them in one notebook, as is the case for Milestone 2. Would it be possible to have different notebooks, one containing NLP, one containing Graph Analysis and one with Data exploration?
 
