@@ -341,3 +341,121 @@ def format_creators_df(df):
     df['USER'] = df['USER'].astype(str)
     to_format = df['USER'].str.match(r'\[\[User:[^\|]+\|([^\]]+)\]\]', na=False)
     df.loc[to_format, 'USER'] = df.loc[to_format, 'USER'].str.extract(r'\[\[User:[^\|]+\|([^\]]+)\]\]', expand=False)
+
+
+
+def calculate_agreement_before_election(wiki_df, elections_df):
+    """
+    Creates agreement before election DataFrame
+
+    Args:
+    - wiki_df (pandas DataFrame): Wiki DataFrame
+    - elections_df (pandas DataFrame): Elections DataFrame
+
+    Returns:
+    - agreement_before_election_df
+    """
+    #Initialize the dictionary to store the results
+    agreement_dict = {}
+
+    i = 0
+    total_rows = len(wiki_df)
+    
+    with tqdm(total=total_rows) as pbar:
+        while i < len(wiki_df):
+            row1 = wiki_df.iloc[i]
+            src1 = row1['SRC']
+            tgt = row1['TGT']
+            vot1 = row1['VOT']
+            dat1 = row1['DAT']
+            
+            election_date_usr1 = elections_df[elections_df['TGT'] == src1]['Earliest Voting Date']
+            
+            if election_date_usr1.empty:
+                before_election_usr1 = False
+            else:
+                before_election_usr1 = dat1 <= election_date_usr1.iloc[0]
+
+            j = i + 1
+            while j < len(wiki_df) and wiki_df.iloc[j]['TGT'] == tgt:
+                row2 = wiki_df.iloc[j]
+                src2 = row2['SRC']
+                vot2 = row2['VOT']
+                dat2 = row2['DAT']
+                
+                election_date_usr2 = elections_df[elections_df['TGT'] == src2]['Earliest Voting Date']
+
+                if election_date_usr2.empty:
+                    before_election_usr2 = False
+                else:
+                    before_election_usr2 = dat2 <= election_date_usr2.iloc[0]
+
+                
+                agreed = (vot1==vot2)
+                
+                dict_entry = None
+                
+
+                #Ensure a pair of SRC values (SRC1, SRC2) or (SRC2, SRC1)
+                #Check if they already exist in the dictionary
+                if (src1, src2) not in agreement_dict and (src2, src1) not in agreement_dict:
+                    agreement_dict[(src1, src2)] = {'Total Votes': 1, 
+                                                    'Agreed': 0,
+                                                    'Total Votes before USR1 election': 0,
+                                                    'Total Votes before USR2 election': 0,
+                                                    'Agreed before USR1 election': 0,
+                                                    'Agreed before USR2 election': 0}
+                    
+                    dict_entry = agreement_dict[(src1, src2)]
+                    
+                elif (src1, src2) in agreement_dict:
+                    dict_entry = agreement_dict[(src1, src2)]
+                    
+                elif (src2, src1) in agreement_dict:
+                    dict_entry = agreement_dict[(src2, src1)]
+                    
+                if before_election_usr1:
+                    dict_entry['Total Votes before USR1 election'] += 1
+                    if agreed:
+                        dict_entry['Agreed before USR1 election'] += 1
+
+                if before_election_usr2:
+                    dict_entry['Total Votes before USR2 election'] += 1
+                    if agreed:
+                        dict_entry['Agreed before USR2 election'] += 1
+
+                #Update Agreed if VOT1 equals VOT2
+                if agreed:
+                        dict_entry['Agreed'] += 1
+                        
+                dict_entry['Total Votes'] += 1
+
+                j += 1
+
+            #Move to the next Row
+            i += 1
+            pbar.update(1)
+            
+
+    usr1_list, usr2_list, total_votes_list, agreed_list, total_votes_before_usr1_list, total_votes_before_usr2_list, agreed_before_usr1_list, agreed_before_usr2_list = zip(*[
+        (src1, src2, values['Total Votes'], values['Agreed'], values['Total Votes before USR1 election'],
+         values['Total Votes before USR2 election'], values['Agreed before USR1 election'], values['Agreed before USR2 election'])
+        for (src1, src2), values in agreement_dict.items()
+    ])
+    
+    agreement_df = pd.DataFrame({
+        'USR1': usr1_list,
+        'USR2': usr2_list,
+        'Total Votes': total_votes_list,
+        'Agreed': agreed_list,
+        'Total Votes before USR1 election': total_votes_before_usr1_list,
+        'Total Votes before USR2 election': total_votes_before_usr2_list,
+        'Agreed before USR1 election': agreed_before_usr1_list,
+        'Agreed before USR2 election': agreed_before_usr2_list,
+    })
+    
+    agreement_df['Agreement Ratio'] = agreement_df['Agreed'] / agreement_df['Total Votes']
+    agreement_df['Agreement Ratio before USR1 election'] = agreement_df['Agreed before USR1 election'] / agreement_df['Total Votes before USR1 election']
+    agreement_df['Agreement Ratio before USR2 election'] = agreement_df['Agreed before USR2 election'] / agreement_df['Total Votes before USR2 election']
+    
+    return agreement_df
