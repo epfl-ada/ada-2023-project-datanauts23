@@ -3,18 +3,17 @@
 
 ## Abstract: 
 Wikipedia relies on volunteer administrators for maintenance. Users seeking administrator status submit a Request for Adminship (RFA). The Wikipedia community then decides whether to accept or to reject a given candidate through public discussions involving comments and votes. 
-Our project aims to provide individuals interested in the Wikipedia administrator role with a guide for a successful election. To achieve this, we analyze the [Wikipedia adminship election](http://snap.stanford.edu/data/wiki-RfA.html) data spanning from 2003 to 2013, with a specific focus on identifying patterns that impact election outcomes. We examine comments related to those elections to extract the conditions on which users base their votes. Furthermore, by analyzing the network voting graph, we check for user groups, who consistently support or oppose the same candidates or engage in mutual support, to uncover their roles in shaping the community’s decisions. 
+Our project aims to provide individuals interested in the Wikipedia administrator role with a guide for a successful election. To achieve this, we analyze the [Wikipedia adminship election](http://snap.stanford.edu/data/wiki-RfA.html) data spanning from 2003 to 2013, with a specific focus on identifying patterns that impact election outcomes. We examine comments related to those elections to extract the conditions on which users base their votes. Furthermore, by analyzing the network voting graph, we check for user groups, who consistently support or oppose the same candidates or interact with similar Wikipedia content, to uncover their roles in shaping the community’s decisions. 
 We combine all these insights to build a roadmap that assists potential candidates in navigating the path towards Adminship.
 
 
 ## Research Questions:
 
 Our project aims to explore the following research questions:
--  How does affinity influence election outcomes, and are there certain votes that carry more weight than others?
 -  How does a candidate's prior engagement in the election process affect their chance of success in his election?
 -  Do voters leave comments consistent with their voting choices and which factors do they usually take into account when voting?
--  To what extent does the involvement of active members in a specific election contribute to the success of a candidate?
 -  How does the large number of neutral votes impact the acceptance or rejection of a candidate?
+-  Can users be grouped into communities that consistently vote similarly? How does that influence their voting behavior?
 
 
 ## Additional Datasets:
@@ -24,11 +23,14 @@ Since our objective is to analyze the factors behind people's voting choices, we
 -  The number of pages created per user: [List of users by pages created](https://en.wikipedia.org/wiki/User:Bryan/List_of_users_by_pages_created) <br>
 -  The number of articles per user : [List of Wikipedians by article count](https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_article_count) <br>
 -  The number of edits per user: [List of Wikipedians by number of edits](https://en.wikipedia.org/wiki/Wikipedia:List_of_Wikipedians_by_number_of_edits) <br>
+-  Monthly WikiMedia editor activity: [Montly WikiMedia Editor Activity](https://data.world/wikimedia/monthly-wikimedia-editor-activity) <br>
+
+We also explore a dataset containing edits of discussion pages attached to each Wikipedia article: [Complete Wikipedia Edit History](https://snap.stanford.edu/data/wiki-meta.html) <br>
 
 
 ## Methods:
-### Part 1 : Data preprocessing :
-#### Part 1.1 : Data extraction :
+### Part 1 : Data preprocessing:
+#### Part 1.1 : Data extraction:
 We parse the data text file to extract information that must be included in our initial dataframe. We proceed then to formatting the columns and handling the missing data by exploring the reasons and correcting the inconsistent values.
 And for better analysis, we create three dataframes: the first one contains information about candidates, the second one about the voters, and the third one repertories the different elections and their outcomes.
 
@@ -57,8 +59,9 @@ We filter comments to keep only interesting ones, based on the two parameters pr
 In this step, we use the “Latent Dirichlet Allocation” method to get a list of the most representative words of each topic sorted by their weight. Therefore, we can determine which criteria is the most sought-after.
 
 ### Part 4 : Graph network analysis :
-The goal behind performing a network analysis would be to assess the possibility the affinity and networking influences positive votes. The goal is to compute relevant network metrics: betweenness centrality, eigenvalue centrality etc… and analyze whether there are any correlations between those metrics and positive (or negative) votes. Furthermore, representing the data as a network can help us visualize it more effectively to uncover some hidden patterns: maybe there exists clusters of users who consistently vote the same way? Maybe some votes are more correlated with positive votes than others?
-
+The goal behind the Graph Network Analysis section is to understand how group behavior influences voting.
+We build three graphs, a voting graph containing the votes cast during the different elections, an agreement graph that reflects how similar voting patterns are between pairs of users, a similarity graph taking into account the similarity between how users interact with Wikipedia content.
+From these graphs, we extract communities, and analyze how users behave with their own community as well as with other communities. This will allow us to understand the role affinity and group-belonging influence the outcomes of elections.
 
 ### Part 5 : Answering the scientific questions :
 Now that we have completed our data analysis, we can gather our results in a comprehensive guide and create a data story presenting the motivations behind positive, neutral and negative votes. Thanks to this, candidates will gain a better understanding of the factors contributing to a successful election, including the percentage of votes required for a positive outcome, the potential influencers among voters, and the candidate qualities that hold significant importance for adminship. 
@@ -74,15 +77,11 @@ Now that we have completed our data analysis, we can gather our results in a com
 
 ## Organization within the team:
 
--  **Akram Elbouanani** : Data processing, network graph analysis, page design
--  **Christian Doimo** : Sentiment analysis, clustering comments by topic, documenting
--  **Liandro Da Silva Monteiro** : Sentiment analysis, clustering comments by topic, data story
--  **Murielle Iradukunda** : Data processing, Data analysis, documenting, page design
--  **Yasmine Sakas** : Data processing, sentiment analysis, data story
-
-## Questions for TAs:
-
--  We have a lot of information, and it feels very clustered to put them in one notebook, as is the case for Milestone 2. Would it be possible to have different notebooks, one containing NLP, one containing Graph Analysis and one with Data exploration?
+-  **Akram Elbouanani** : Data Processing, Network Graph Analysis, Organization of Deliverables, Data Story
+-  **Christian Doimo** : NLP, Sentiment Analysis, Clustering Comments by Topic, Data Analysis of additional Datasets, Data Story
+-  **Liandro Da Silva Monteiro** : NLP, Sentiment Analysis, Clustering Comments by Topic, Data Story
+-  **Murielle Iradukunda** : Data Processing, Data Analysis, Statistical Tests, Matching, Documenting, Graphs Plotting
+-  **Yasmine Sakas** : Data Processing, Sentiment Analysis, Data Story Webpage, Data Story, Graphs Plotting
 
 
 
