@@ -6,7 +6,7 @@ Wikipedia relies on volunteer administrators for maintenance. Users seeking admi
 Our project aims to provide individuals interested in the Wikipedia administrator role with a guide for a successful election. To achieve this, we analyze the [Wikipedia adminship election](http://snap.stanford.edu/data/wiki-RfA.html) data spanning from 2003 to 2013, with a specific focus on identifying patterns that impact election outcomes. We examine comments related to those elections to extract the conditions on which users base their votes. Furthermore, by analyzing the network voting graph, we check for user groups, who consistently support or oppose the same candidates or interact with similar Wikipedia content, to uncover their roles in shaping the community’s decisions. 
 We combine all these insights to build a roadmap that assists potential candidates in navigating the path towards Adminship.
 
-> Please visit our Data Story [here📍](https://sakasy.github.io/).
+> Please find all secrets to winning a Wikipedia Election in our [Data Story](https://sakasy.github.io/).
 
 ## Research Questions:
 
