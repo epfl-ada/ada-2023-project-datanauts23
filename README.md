@@ -58,6 +58,9 @@ We filter comments to keep only interesting ones, based on the two parameters pr
 #### Part 3.4 : Clustering Comments by Topic :
 In this step, we use the [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) method to get a list of the most representative words of each topic sorted by their weight. Therefore, we can determine which criteria is the most sought-after.
 
+#### Part 3.5 : N-grams Analysis:
+By examining noteworthy words, we analyze the occurrence of n-grams (with n ranging from 2 to 5). The objective is to identify meaningful sequences of words that provide valuable insights into the expectations associated with a new administrator.
+
 ### Part 4 : Network Analysis :
 The goal behind the Network Analysis section is to understand how group behavior influences voting.
 We build three graphs, a voting graph containing the votes cast during the different elections, an agreement graph that reflects how similar voting patterns are between pairs of users, a similarity graph taking into account the similarity between how users interact with Wikipedia content.
