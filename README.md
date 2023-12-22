@@ -70,10 +70,8 @@ Now that we have completed our data analysis, we can gather our results in a com
 -  10/11/2023 - Part 1
 -  17/11/2022 - Part 3.1 and 3.2, and beginning of part 2 and part 3.4 - Deliver Milestone 2
 -  05/12/2022 - Beginning of Milestone 3: End of part 2 and 3.4 and beginning of part 4
--  09/12/2022 - Part 4: Networks construction and network statistics extraction.
-              - Part 3: Topic Mining and Comments' Categorization.     
--  15/12/2022 - Part 4: Network extraction of communities, analysis of those communities.
-              - Part 4: Creation of datastory's website. 
+-  09/12/2022 - Part 4: Networks construction and network statistics extraction and part 3: topic mining and comments' categorization.     
+-  15/12/2022 - Part 4: Network extraction of communities, analysis of those communities and part 4: creation of datastory's website. 
 -  19/12/2022 - Part 5: Data Story and Page Design
 -  22/12/2022 - Deliver Milestone 3
 
